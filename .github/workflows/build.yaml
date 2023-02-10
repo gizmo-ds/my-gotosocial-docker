@@ -1,0 +1,20 @@
+name: Build images
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build and push
+        env:
+          CR_PAT: ${{ secrets.CR_PAT }}
+        run: |
+          docker build --build-arg version=$(git --git-dir=.git/modules/gotosocial describe --tags --always) -t ghcr.io/gizmo-ds/gotosocial:latest -f Dockerfile .
+          echo $CR_PAT | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker push ghcr.io/gizmo-ds/gotosocial:latest
