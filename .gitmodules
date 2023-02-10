@@ -1,0 +1,3 @@
+[submodule "gotosocial"]
+	path = gotosocial
+	url = https://github.com/gizmo-ds/gotosocial
