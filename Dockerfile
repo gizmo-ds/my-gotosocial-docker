@@ -26,11 +26,10 @@ RUN go mod download && \
 
 FROM docker.io/library/alpine:latest
 RUN apk add ffmpeg
-USER 1000:1000
 WORKDIR /gotosocial/storage
 WORKDIR /gotosocial
-COPY --from=bundler --chown=1000:1000 /web /gotosocial/web
-COPY --from=builder --chown=1000:1000 /gotosocial/gotosocial /gotosocial/gotosocial
-COPY --from=swagger --chown=1000:1000 /gotosocial/swagger.yaml /gotosocial/swagger.yaml
+COPY --from=bundler /web /gotosocial/web
+COPY --from=builder /gotosocial/gotosocial /gotosocial/gotosocial
+COPY --from=swagger /gotosocial/swagger.yaml /gotosocial/swagger.yaml
 VOLUME [ "/gotosocial/storage" ]
 ENTRYPOINT [ "/gotosocial/gotosocial", "server", "start" ]
